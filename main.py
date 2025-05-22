@@ -7,6 +7,8 @@ from datetime import datetime
 #from os import environ  #import tylko czesci, co potencjalnie utrudnia dostep do innych,
 #dzieki temu mozna by zamiast os.environ.get pisac po prostu environ.get
 from config import Config
+from services.mysql_db import save_to_mysql
+from services.mysql_db import get_from_mysql
 
 #import pymongo zeby sie zgrac z MongoDB
 import pymongo
@@ -17,7 +19,9 @@ from services.fetch_weather import fetch_weather
 CITY = input("Podaj nazwę miasta: ")
 print("1. Zapisuj do pliku Excel.")
 print("2. Zapisuj do MongoDB.")
-print("3.Zapisuj do MongoDB i pliku Excel.")
+print("3. Zapisuj do MongoDB i pliku Excel.")
+print("4. Zapisuj do MySQL.")
+print("5. Odczytaj 10 ostatnich zapisanych danych z MySQL")
 OPERATION = int(input("Wybierz rodzaj operacji:"))
 weather = fetch_weather(Config.API_KEY,CITY)
 
@@ -29,6 +33,11 @@ match OPERATION:
     case 3:
         save_to_excel(Config.EXCEL_FILENAME, weather)
         save_to_mongo(weather)
+    case 4:
+        save_to_mysql(weather)
+    case 5:
+        get_from_mysql()
+
     case _:
         print("Dane zostały dodane.")
 
